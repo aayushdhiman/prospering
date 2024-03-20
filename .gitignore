@@ -32,5 +32,6 @@ var/
 # Environment variables
 .env
 
-# Ignoring driver.py
+# Ignoring driver.py and reminders.json
 driver.py
+reminders.json

@@ -56,6 +56,8 @@ async def listreminders(ctx):
         await ctx.send("No active reminders.")
 
 def remove_past_reminders():
+    global reminders
+    
     current_time = datetime.datetime.now(datetime.timezone.utc)
     reminders_to_remove = []
 
@@ -71,7 +73,8 @@ def remove_past_reminders():
         json.dump(reminders, f)
 
 def load_reminders():
-    # Load existing reminders from the JSON file
+    global reminders
+
     try:
         with open(REMINDERS_FILE, 'r') as f:
             data = f.read()
