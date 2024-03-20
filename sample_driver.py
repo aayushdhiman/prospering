@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import discord
 from discord.ext import commands
 import reminders
@@ -9,14 +10,17 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
+    reminders.load_reminders()  # Load reminders from the JSON file
     print(f'{bot.user} succesfully logged in!')
 
 @bot.command()
 async def remindme(ctx, task, time_value: int, time_unit: str):
+    '''Set a reminder for a task after a specified amount of time.'''
     await reminders.remindme(ctx, task, time_value, time_unit)
 
 @bot.command()
 async def listreminders(ctx):
+    '''List all active reminders.'''
     await reminders.listreminders(ctx)
 
 @bot.event
@@ -25,8 +29,8 @@ async def on_message(message):
         return
     await bot.process_commands(message)
 
+
     # Call the function to remove past reminders whenever a message is received
-    reminders.load_reminders()
     reminders.remove_past_reminders()
 
 bot.run(TOKEN)
