@@ -49,10 +49,10 @@ async def listreminders(ctx):
         if reminder_time > current_time:
             reminder_time = reminder_time.astimezone(local_timezone)
             formatted_time = reminder_time.strftime("%I:%M %p on %m/%d")
-            active_reminders.append((formatted_time, reminder_data))
+            active_reminders.append((formatted_time, reminder_data, ctx.author))
 
     if active_reminders:
-        reminder_list = '\n'.join([f"{reminder_time}: {reminder_data['task']}" for reminder_time, reminder_data in active_reminders])
+        reminder_list = '\n'.join([f"{reminder_time}: {reminder_data['task']} for {author}" for reminder_time, reminder_data, author in active_reminders])
         await ctx.send("Active reminders:\n" + reminder_list)
     else:
         await ctx.send("No active reminders.")
