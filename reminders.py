@@ -32,7 +32,8 @@ async def remindme(ctx, task, time_value: int, time_unit: str):
         json.dump(reminders, f)
 
     reminder_time = reminder_time.astimezone(pytz.timezone(LOCAL_TIMEZONE))
-    await ctx.send(f"I'll remind you to {task} at {str(reminder_time)}.")
+    formatted_time = reminder_time.strftime("%I:%M %p on %m/%d")
+    await ctx.send(f"I'll remind you to {task} at {str(formatted_time)}.")
 
     remove_past_reminders()  # Call the function to remove past reminders
     await asyncio.sleep((reminder_time - current_time).total_seconds())
@@ -47,13 +48,15 @@ async def listreminders(ctx):
         reminder_time = datetime.datetime.fromisoformat(reminder_time_str).replace(tzinfo=datetime.timezone.utc)
         if reminder_time > current_time:
             reminder_time = reminder_time.astimezone(local_timezone)
-            active_reminders.append((reminder_time, reminder_data))
+            formatted_time = reminder_time.strftime("%I:%M %p on %m/%d")
+            active_reminders.append((formatted_time, reminder_data))
 
     if active_reminders:
-        reminder_list = '\n'.join([f"{str(reminder_time)}: {reminder_data['task']}" for reminder_time, reminder_data in active_reminders])
+        reminder_list = '\n'.join([f"{reminder_time}: {reminder_data['task']}" for reminder_time, reminder_data in active_reminders])
         await ctx.send("Active reminders:\n" + reminder_list)
     else:
         await ctx.send("No active reminders.")
+
 
 def remove_past_reminders():
     global reminders
