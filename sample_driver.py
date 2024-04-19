@@ -2,6 +2,7 @@
 import discord
 from discord.ext import commands
 import reminders
+import scores
 
 TOKEN = "YOUR TOKEN HERE"
 
@@ -23,13 +24,18 @@ async def listreminders(ctx):
     '''List all active reminders.'''
     await reminders.listreminders(ctx)
 
+@bot.command()
+async def listscores(ctx):
+    '''List all active scores.'''
+    await scores.scores(ctx, bot)
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
     await bot.process_commands(message)
-
-
+    await scores.on_message(message)
+    
     # Call the function to remove past reminders whenever a message is received
     reminders.remove_past_reminders()
 
