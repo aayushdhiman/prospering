@@ -34,7 +34,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     await bot.process_commands(message)
-    await scores.on_message(message)
+    await scores.on_message(message, bot)
     
     # Call the function to remove past reminders whenever a message is received
     reminders.remove_past_reminders()
