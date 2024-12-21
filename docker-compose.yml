@@ -1,12 +1,11 @@
-version: '3.8'
-
 services:
   prospering:
-    build: 
+    build:
       context: ./prospering
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
     depends_on:
       db:
         condition: service_healthy
@@ -25,7 +24,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
