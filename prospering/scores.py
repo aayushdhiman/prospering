@@ -30,7 +30,9 @@ async def update_score(user_id, change, ctx, bot):
             scores[user_id] -= 2
             await ctx.send(f"{get_friendly_name(user_id, bot)} lost 2 social credit.")
         file.seek(0)
+        file.truncate()
         json.dump(scores, file, indent=4)
+
 
 def get_friendly_name(user_id, bot):
     user = bot.get_user(int(user_id))

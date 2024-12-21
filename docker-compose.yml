@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  prospering:
+    build: 
+      context: ./prospering
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - prospering-network
+    volumes:
+      - ./prospering:/app
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - prospering-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  prospering-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
