@@ -32,6 +32,12 @@ var/
 # Environment variables
 .env
 
+# Virtualenv
+.venv/
+bin/
+lib64
+pyvenv.cfg
+
 # Ignoring driver.py and reminders.json
 driver.py
 reminders.json

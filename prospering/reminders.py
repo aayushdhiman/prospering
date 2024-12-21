@@ -1,7 +1,7 @@
 import datetime
 import json
-import pytz
 import asyncio
+import pytz
 
 reminders = {}
 REMINDERS_FILE = 'reminders.json'
@@ -45,14 +45,17 @@ async def listreminders(ctx):
     active_reminders = []
 
     for reminder_time_str, reminder_data in reminders.items():
-        reminder_time = datetime.datetime.fromisoformat(reminder_time_str).replace(tzinfo=datetime.timezone.utc)
+        reminder_time = datetime.datetime.fromisoformat(reminder_time_str).replace(
+            tzinfo=datetime.timezone.utc
+        )
         if reminder_time > current_time:
             reminder_time = reminder_time.astimezone(local_timezone)
             formatted_time = reminder_time.strftime("%I:%M %p on %m/%d")
             active_reminders.append((formatted_time, reminder_data, ctx.author))
 
     if active_reminders:
-        reminder_list = '\n'.join([f"{reminder_time}: {reminder_data['task']} for {author}" for reminder_time, reminder_data, author in active_reminders])
+        reminder_list = '\n'.join([f"{reminder_time}: {reminder_data['task']} for {author}"
+                                   for reminder_time, reminder_data, author in active_reminders])
         await ctx.send("Active reminders:\n" + reminder_list)
     else:
         await ctx.send("No active reminders.")
@@ -60,12 +63,14 @@ async def listreminders(ctx):
 
 def remove_past_reminders():
     global reminders
-    
+
     current_time = datetime.datetime.now(datetime.timezone.utc)
     reminders_to_remove = []
 
     for reminder_time_str in list(reminders.keys()):
-        reminder_time = datetime.datetime.fromisoformat(reminder_time_str).replace(tzinfo=datetime.timezone.utc)
+        reminder_time = datetime.datetime.fromisoformat(reminder_time_str).replace(
+            tzinfo=datetime.timezone.utc
+        )
         if reminder_time < current_time:
             reminders_to_remove.append(reminder_time_str)
 
